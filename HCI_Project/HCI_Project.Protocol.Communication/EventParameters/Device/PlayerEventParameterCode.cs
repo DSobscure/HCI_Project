@@ -2,7 +2,7 @@
 {
     public enum PlayerEventParameterCode : byte
     {
-        PlayerID,
+        Nickname,
         EventCode,
         Parameters
     }

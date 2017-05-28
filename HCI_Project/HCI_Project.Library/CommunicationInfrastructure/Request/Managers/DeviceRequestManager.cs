@@ -1,5 +1,5 @@
-﻿using HCI_Project.Library.CommunicationInfrastructure.Request.Handlers;
-using HCI_Project.Library.CommunicationInfrastructure.Request.Handlers.Device;
+﻿using HCI_Project.Library.CommunicationInfrastructure.Request.Handlers.Device;
+using HCI_Project.Protocol;
 using HCI_Project.Protocol.Communication.FetchDataCodes;
 using HCI_Project.Protocol.Communication.FetchDataRequestParameters;
 using HCI_Project.Protocol.Communication.OperationCodes;
@@ -21,6 +21,7 @@ namespace HCI_Project.Library.CommunicationInfrastructure.Request.Managers
 
             requestTable.Add(DeviceOperationCode.FetchData, FetchDataRequestBroker);
             requestTable.Add(DeviceOperationCode.PlayerRequest, new PlayerRequestBroker(device));
+            requestTable.Add(DeviceOperationCode.ConnectPlayer, new ConnectPlayerHandler(device));
         }
         public bool Operate(DeviceOperationCode operationCode, Dictionary<byte, object> parameters, out string errorMessage)
         {
@@ -60,11 +61,21 @@ namespace HCI_Project.Library.CommunicationInfrastructure.Request.Managers
         {
             Dictionary<byte, object> operationParameters = new Dictionary<byte, object>
             {
-                { (byte)PlayerRequestParameterCode.PlayerID, player.PlayerID },
+                { (byte)PlayerRequestParameterCode.Nickname, player.Nickname },
                 { (byte)PlayerRequestParameterCode.OperationCode, operationCode },
                 { (byte)PlayerRequestParameterCode.Parameters, parameters }
             };
             SendOperation(DeviceOperationCode.PlayerRequest, operationParameters);
+        }
+
+        public void ConnectPlayer(string nickname, DeviceCode deviceCode)
+        {
+            Dictionary<byte, object> operationParameters = new Dictionary<byte, object>
+            {
+                { (byte)ConnectPlayerParameterCode.Nickname, nickname },
+                { (byte)ConnectPlayerParameterCode.DeviceCode, deviceCode }
+            };
+            SendOperation(DeviceOperationCode.ConnectPlayer, operationParameters);
         }
     }
 }

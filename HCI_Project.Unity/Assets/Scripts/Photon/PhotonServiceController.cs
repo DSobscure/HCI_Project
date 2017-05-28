@@ -15,6 +15,17 @@ public class PhotonServiceController : MonoBehaviour
     {
         Global.PhotonService.Service();
     }
+    private void OnGUI()
+    {
+        if(Global.Player != null)
+        {
+            GUI.Label(new Rect(50, 50, 200, 20), string.Format("頭戴: {0}, 手持: {1}", Global.Player.HeadDeviceConnected, Global.Player.HandDeviceConnected));
+        }
+        else
+        {
+            GUI.Label(new Rect(50, 50, 200, 20), "未連接");
+        }
+    }
     void OnDestroy()
     {
         Global.PhotonService.Disconnect();

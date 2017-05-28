@@ -1,25 +1,52 @@
 ﻿using HCI_Project.Library.CommunicationInfrastructure.Event.Managers;
 using HCI_Project.Library.CommunicationInfrastructure.Request.Managers;
 using HCI_Project.Library.CommunicationInfrastructure.Response.Managers;
+using HCI_Project.Protocol;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace HCI_Project.Library
 {
     public class Player
     {
-        public int PlayerID { get; private set; }
         public string Nickname { get; private set; }
-        private List<Device> devices = new List<Device>();
-        public IEnumerable<Device> Devices { get { return devices.ToArray(); } }
-        public int ConnectedDeviceCount { get { return devices.Count; } }
+        private Dictionary<Device, DeviceCode> deviceDictionary = new Dictionary<Device, DeviceCode>();
+        public IEnumerable<Device> Devices { get { return deviceDictionary.Keys.ToArray(); } }
+        public int ConnectedDeviceCount { get { return deviceDictionary.Count; } }
+
+        private bool headDeviceConnected;
+        public bool HeadDeviceConnected
+        {
+            get { return headDeviceConnected; }
+            set
+            {
+                headDeviceConnected = value;
+                OnHeadDeviceConnectedChanged?.Invoke(this);
+            }
+        }
+
+        private bool handDeviceConnected;
+        public bool HandDeviceConnected
+        {
+            get { return handDeviceConnected; }
+            set
+            {
+                handDeviceConnected = value;
+                OnHandDeviceConnectedChanged?.Invoke(this);
+            }
+        }
 
         public PlayerEventManager EventManager { get; private set; }
         public PlayerRequestManager RequestManager { get; private set; }
         public PlayerResponseManager ResponseManager { get; private set; }
 
-        public Player(int playerID, string nickname)
+        public event Action<Player, Device> OnDeviceRemoved;
+        public event Action<Player> OnHeadDeviceConnectedChanged;
+        public event Action<Player> OnHandDeviceConnectedChanged;
+
+        public Player(string nickname)
         {
-            PlayerID = playerID;
             Nickname = nickname;
 
             EventManager = new PlayerEventManager(this);
@@ -28,15 +55,43 @@ namespace HCI_Project.Library
         }
         public override string ToString()
         {
-            return $"Player{PlayerID}({Nickname})";
+            return $"Player({Nickname})";
         }
-        public void AddDevice(Device device)
+        public void AddDevice(Device device, DeviceCode deviceCode)
         {
-            devices.Add(device);
+            switch(deviceCode)
+            {
+                case DeviceCode.Head:
+                    HeadDeviceConnected = true;
+                    break;
+                case DeviceCode.Hand:
+                    HandDeviceConnected = true;
+                    break;
+            }
+            deviceDictionary.Add(device, deviceCode);
         }
         public bool RemoveDevice(Device device)
         {
-            return devices.Remove(device);
+            if(deviceDictionary.ContainsKey(device))
+            {
+                DeviceCode deviceCode = deviceDictionary[device];
+                deviceDictionary.Remove(device);
+                switch (deviceCode)
+                {
+                    case DeviceCode.Head:
+                        HeadDeviceConnected = deviceDictionary.Values.Any(x => x == DeviceCode.Head);
+                        break;
+                    case DeviceCode.Hand:
+                        HandDeviceConnected = deviceDictionary.Values.Any(x => x == DeviceCode.Hand);
+                        break;
+                }
+                OnDeviceRemoved?.Invoke(this, device);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }

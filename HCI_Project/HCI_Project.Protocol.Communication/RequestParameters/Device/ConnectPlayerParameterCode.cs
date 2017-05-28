@@ -1,9 +1,8 @@
 ﻿namespace HCI_Project.Protocol.Communication.RequestParameters.Device
 {
-    public enum PlayerRequestParameterCode : byte
+    public enum ConnectPlayerParameterCode : byte
     {
         Nickname,
-        OperationCode,
-        Parameters
+        DeviceCode
     }
 }

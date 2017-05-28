@@ -15,16 +15,16 @@ namespace HCI_Project.Library.CommunicationInfrastructure.Request.Handlers.Devic
         {
             if (base.Handle(operationCode, parameters, out errorMessage))
             {
-                int playerID = (int)parameters[(byte)PlayerRequestParameterCode.PlayerID];
+                string nickname = (string)parameters[(byte)PlayerRequestParameterCode.Nickname];
                 PlayerOperationCode resolvedOperationCode = (PlayerOperationCode)parameters[(byte)PlayerRequestParameterCode.OperationCode];
                 Dictionary<byte, object> resolvedParameters = (Dictionary<byte, object>)parameters[(byte)PlayerRequestParameterCode.Parameters];
-                if (subject.Player.PlayerID == playerID)
+                if (subject.Player.Nickname == nickname)
                 {
                     return subject.Player.RequestManager.Operate(resolvedOperationCode, resolvedParameters, out errorMessage);
                 }
                 else
                 {
-                    errorMessage = $"PlayerOperation Error PlayerID: {playerID} Not in Device: {subject}";
+                    errorMessage = $"PlayerOperation Error Player: {nickname} Not in Device: {subject}";
                     return false;
                 }
             }

@@ -4,6 +4,7 @@
     {
         Successful,
         ParameterCountError,
-        UndefinedOperation
+        UndefinedOperation,
+        Duplicate,
     }
 }

@@ -30,13 +30,13 @@ namespace HCI_Project.Library.CommunicationInfrastructure.Request.Managers
                 }
                 else
                 {
-                    errorMessage = $"PlayerOperation Error: {operationCode} from Player: {player.PlayerID}\nErrorMessahe: {errorMessage}";
+                    errorMessage = $"PlayerOperation Error: {operationCode} from Player: {player.Nickname}\nErrorMessahe: {errorMessage}";
                     return false;
                 }
             }
             else
             {
-                errorMessage = $"Unknow PlayerOperation:{operationCode} from Player: {player.PlayerID}";
+                errorMessage = $"Unknow PlayerOperation:{operationCode} from Player: {player.Nickname}";
                 return false;
             }
         }

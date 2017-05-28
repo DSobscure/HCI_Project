@@ -28,13 +28,13 @@ namespace HCI_Project.Library.CommunicationInfrastructure.Response.Managers
                 }
                 else
                 {
-                    errorMessage = $"PlayerResponse Error: {operationCode} from Player: {player.PlayerID}\nErrorMessage: {errorMessage}";
+                    errorMessage = $"PlayerResponse Error: {operationCode} from Player: {player.Nickname}\nErrorMessage: {errorMessage}";
                     return false;
                 }
             }
             else
             {
-                errorMessage = $"Unknow PlayerResponse:{operationCode} from Player: {player.PlayerID}";
+                errorMessage = $"Unknow PlayerResponse:{operationCode} from Player: {player.Nickname}";
                 return false;
             }
         }

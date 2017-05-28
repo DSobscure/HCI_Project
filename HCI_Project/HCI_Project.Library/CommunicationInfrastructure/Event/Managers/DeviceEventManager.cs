@@ -59,7 +59,7 @@ namespace HCI_Project.Library.CommunicationInfrastructure.Event.Managers
         {
             Dictionary<byte, object> eventData = new Dictionary<byte, object>
             {
-                { (byte)PlayerEventParameterCode.PlayerID, player.PlayerID },
+                { (byte)PlayerEventParameterCode.Nickname, player.Nickname },
                 { (byte)PlayerEventParameterCode.EventCode, (byte)eventCode },
                 { (byte)PlayerEventParameterCode.Parameters, parameters }
             };

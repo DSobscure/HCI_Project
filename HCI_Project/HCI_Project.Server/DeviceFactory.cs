@@ -40,8 +40,8 @@ namespace HCI_Project.Server
             if (ContainsDeviceGuid(device.Guid))
             {
                 connectedDevices.Remove(device.Guid);
-                LogService.InfoFormat($"Device: {device} Disconnect");
                 device.RemovePlayer();
+                LogService.InfoFormat($"Device: {device} Disconnect");
             }
         }
     }

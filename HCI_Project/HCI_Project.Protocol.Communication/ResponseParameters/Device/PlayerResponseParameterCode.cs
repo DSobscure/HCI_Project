@@ -2,7 +2,7 @@
 {
     public enum PlayerResponseParameterCode : byte
     {
-        PlayerID,
+        Nickname,
         OperationCode,
         ReturnCode,
         OperationMessage,

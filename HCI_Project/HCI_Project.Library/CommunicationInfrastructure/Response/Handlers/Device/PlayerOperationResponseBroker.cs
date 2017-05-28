@@ -15,19 +15,19 @@ namespace HCI_Project.Library.CommunicationInfrastructure.Response.Handlers.Devi
         {
             if (base.Handle(operationCode, returnCode, operationMessage, parameters, out errorMessage))
             {
-                int playerID = (int)parameters[(byte)PlayerResponseParameterCode.PlayerID];
+                string nickname = (string)parameters[(byte)PlayerResponseParameterCode.Nickname];
                 PlayerOperationCode resolvedOperationCode = (PlayerOperationCode)parameters[(byte)PlayerResponseParameterCode.OperationCode];
                 ReturnCode resolvedReturnCode = (ReturnCode)parameters[(byte)PlayerResponseParameterCode.ReturnCode];
                 string resolvedOperationMessage = (string)parameters[(byte)PlayerResponseParameterCode.OperationMessage];
                 Dictionary<byte, object> resolvedParameters = (Dictionary<byte, object>)parameters[(byte)PlayerResponseParameterCode.Parameters];
 
-                if (subject.Player.PlayerID == playerID)
+                if (subject.Player.Nickname == nickname)
                 {
                     return subject.Player.ResponseManager.Operate(resolvedOperationCode, resolvedReturnCode, resolvedOperationMessage, resolvedParameters, out errorMessage);
                 }
                 else
                 {
-                    errorMessage = $"PlayerOperationResponse Error Player ID: {playerID} Not in Device: {subject}";
+                    errorMessage = $"PlayerOperationResponse Error Player: {nickname} Not in Device: {subject}";
                     return false;
                 }
             }

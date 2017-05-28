@@ -18,6 +18,7 @@ namespace HCI_Project.Library.CommunicationInfrastructure.Response.Managers
 
             operationTable.Add(DeviceOperationCode.FetchData, new FetchDataResponseBroker(device));
             operationTable.Add(DeviceOperationCode.PlayerRequest, new PlayerOperationResponseBroker(device));
+            operationTable.Add(DeviceOperationCode.ConnectPlayer, new ConnectPlayerResponseHandler(device));
         }
         public bool Operate(DeviceOperationCode operationCode, ReturnCode returnCode, string debugMessage, Dictionary<byte, object> parameters, out string errorMessage)
         {
@@ -47,7 +48,7 @@ namespace HCI_Project.Library.CommunicationInfrastructure.Response.Managers
         {
             Dictionary<byte, object> responseData = new Dictionary<byte, object>
             {
-                { (byte)PlayerResponseParameterCode.PlayerID, player.PlayerID },
+                { (byte)PlayerResponseParameterCode.Nickname, player.Nickname },
                 { (byte)PlayerResponseParameterCode.OperationCode, (byte)operationCode },
                 { (byte)PlayerResponseParameterCode.ReturnCode, (short)returnCode },
                 { (byte)PlayerResponseParameterCode.OperationMessage, operationMessage },

@@ -37,6 +37,7 @@ namespace HCI_Project.Server.PhotonEnvironment
         private void SetupFactories()
         {
             DeviceFactory.Initial();
+            PlayerFactory.Initial();
         }
 
         private void SetupLog()
