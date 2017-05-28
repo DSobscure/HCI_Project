@@ -2,6 +2,7 @@
 using HCI_Project.Library.CommunicationInfrastructure.Event.Managers;
 using HCI_Project.Library.CommunicationInfrastructure.Request.Managers;
 using HCI_Project.Library.CommunicationInfrastructure.Response.Managers;
+using System;
 
 namespace HCI_Project.Library
 {
@@ -15,6 +16,8 @@ namespace HCI_Project.Library
         public DeviceRequestManager RequestManager { get; private set; }
         public DeviceResponseManager ResponseManager { get; private set; }
 
+        public event Action<Device> OnPlayerChanged;
+
         public Device(CommunicationInterface communicationInterface, RequestInterface requestInterface)
         {
             CommunicationInterface = communicationInterface;
@@ -23,10 +26,18 @@ namespace HCI_Project.Library
             RequestManager = new DeviceRequestManager(this);
             ResponseManager = new DeviceResponseManager(this);
         }
+        public void AddPlayer(Player player)
+        {
+            RemovePlayer();
+            Player = player;
+            Player.AddDevice(this);
+            OnPlayerChanged?.Invoke(this);
+        }
         public void RemovePlayer()
         {
             Player.RemoveDevice(this);
             Player = null;
+            OnPlayerChanged?.Invoke(this);
         }
     }
 }

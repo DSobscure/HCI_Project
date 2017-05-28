@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2015
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HCI_Project.Unity.Plugins", "HCI_Project.Unity.Plugins.csproj", "{80D151D6-98E2-A09F-90DD-E6C629A33022}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HCI_Project.Unity", "HCI_Project.Unity.csproj", "{BB83E883-C7FE-2B56-44B8-4A6D7D385684}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{80D151D6-98E2-A09F-90DD-E6C629A33022}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{80D151D6-98E2-A09F-90DD-E6C629A33022}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{80D151D6-98E2-A09F-90DD-E6C629A33022}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{80D151D6-98E2-A09F-90DD-E6C629A33022}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BB83E883-C7FE-2B56-44B8-4A6D7D385684}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BB83E883-C7FE-2B56-44B8-4A6D7D385684}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BB83E883-C7FE-2B56-44B8-4A6D7D385684}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BB83E883-C7FE-2B56-44B8-4A6D7D385684}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
