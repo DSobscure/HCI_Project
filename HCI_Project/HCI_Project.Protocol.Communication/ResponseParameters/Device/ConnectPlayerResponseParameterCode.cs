@@ -4,6 +4,6 @@
     {
         Nickname,
         HeadDeviceConnected,
-        HandDeviceConnected,
+        HandTakeDeviceConnected,
     }
 }

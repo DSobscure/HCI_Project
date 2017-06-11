@@ -3,6 +3,6 @@
     public enum PlayerSyncDataCode : byte
     {
         HeadDeviceConnected,
-        HandDeviceConnected
+        HandTakeDeviceConnected
     }
 }

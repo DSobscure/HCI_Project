@@ -28,7 +28,7 @@ namespace HCI_Project.Library.CommunicationInfrastructure.Request.Handlers.Devic
                     {
                         { (byte)ConnectPlayerResponseParameterCode.Nickname, player.Nickname },
                         { (byte)ConnectPlayerResponseParameterCode.HeadDeviceConnected, player.HeadDeviceConnected },
-                        { (byte)ConnectPlayerResponseParameterCode.HandDeviceConnected, player.HandDeviceConnected },
+                        { (byte)ConnectPlayerResponseParameterCode.HandTakeDeviceConnected, player.HandTakeDeviceConnected },
                     };
                     SendResponse(operationCode, returnCode, errorMessage, responseParameters);
                 }

@@ -19,11 +19,11 @@ public class PhotonServiceController : MonoBehaviour
     {
         if(Global.Player != null)
         {
-            GUI.Label(new Rect(50, 50, 200, 20), string.Format("頭戴: {0}, 手持: {1}", Global.Player.HeadDeviceConnected, Global.Player.HandDeviceConnected));
+            GUI.Label(new Rect(50, 50, 300, 20), string.Format("Head Device: {0}, HandTake Device: {1}", Global.Player.HeadDeviceConnected, Global.Player.HandTakeDeviceConnected));
         }
         else
         {
-            GUI.Label(new Rect(50, 50, 200, 20), "未連接");
+            GUI.Label(new Rect(50, 50, 200, 20), "No Connected Device");
         }
     }
     void OnDestroy()

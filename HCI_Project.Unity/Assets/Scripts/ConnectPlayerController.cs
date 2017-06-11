@@ -7,14 +7,25 @@ public class ConnectPlayerController : MonoBehaviour
 {
     [SerializeField]
     private InputField nicknameInputField;
+    [SerializeField]
+    private GameObject cannotConnectToNetworkPanel;
 
 
     void Start ()
     {
+        cannotConnectToNetworkPanel.SetActive(!Global.PhotonService.ServerConnected);
+        Global.PhotonService.OnConnectStatusChanged += PhotonService_OnConnectStatusChanged;
         Global.Device.OnPlayerChanged += Device_OnPlayerChanged;
 	}
+
+    private void PhotonService_OnConnectStatusChanged(bool connected)
+    {
+        cannotConnectToNetworkPanel.SetActive(!connected);
+    }
+
     private void OnDestroy()
     {
+        Global.PhotonService.OnConnectStatusChanged -= PhotonService_OnConnectStatusChanged;
         Global.Device.OnPlayerChanged -= Device_OnPlayerChanged;
     }
 
@@ -25,8 +36,8 @@ public class ConnectPlayerController : MonoBehaviour
             case DeviceCode.Head:
                 SceneManager.LoadScene("Main_Head");
                 break;
-            case DeviceCode.Hand:
-                SceneManager.LoadScene("Main_Hand");
+            case DeviceCode.HandTake:
+                SceneManager.LoadScene("Main_HandTake");
                 break;
         }
     }
@@ -38,12 +49,12 @@ public class ConnectPlayerController : MonoBehaviour
             Global.Device.RequestManager.ConnectPlayer(nicknameInputField.text, DeviceCode.Head);
         }
     }
-    public void ConnectHandDevice()
+    public void ConnectHandTakeDevice()
     {
         if (nicknameInputField.text != null)
         {
-            Global.DeviceCode = DeviceCode.Hand;
-            Global.Device.RequestManager.ConnectPlayer(nicknameInputField.text, DeviceCode.Hand);
+            Global.DeviceCode = DeviceCode.HandTake;
+            Global.Device.RequestManager.ConnectPlayer(nicknameInputField.text, DeviceCode.HandTake);
         }
     }
 }

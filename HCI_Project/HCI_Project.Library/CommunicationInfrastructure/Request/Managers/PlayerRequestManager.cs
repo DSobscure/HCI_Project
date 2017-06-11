@@ -1,8 +1,9 @@
-﻿using HCI_Project.Library.CommunicationInfrastructure.Request.Handlers;
-using HCI_Project.Library.CommunicationInfrastructure.Request.Handlers.Player;
+﻿using HCI_Project.Library.CommunicationInfrastructure.Request.Handlers.Player;
+using HCI_Project.Protocol;
 using HCI_Project.Protocol.Communication.FetchDataCodes;
 using HCI_Project.Protocol.Communication.FetchDataRequestParameters;
 using HCI_Project.Protocol.Communication.OperationCodes;
+using HCI_Project.Protocol.Communication.RequestParameters.Player;
 using System.Collections.Generic;
 
 namespace HCI_Project.Library.CommunicationInfrastructure.Request.Managers
@@ -19,6 +20,7 @@ namespace HCI_Project.Library.CommunicationInfrastructure.Request.Managers
             FetchDataRequestBroker = new PlayerFetchDataRequestBroker(player);
 
             operationTable.Add(PlayerOperationCode.FetchData, FetchDataRequestBroker);
+            operationTable.Add(PlayerOperationCode.RemoteOperation, new RemoteOperationHandler(player));
         }
         internal bool Operate(PlayerOperationCode operationCode, Dictionary<byte, object> parameters, out string errorMessage)
         {
@@ -56,6 +58,17 @@ namespace HCI_Project.Library.CommunicationInfrastructure.Request.Managers
                 { (byte)FetchDataRequestParameterCode.Parameters, parameters }
             };
             SendOperation(PlayerOperationCode.FetchData, fetchDataParameters);
+        }
+
+        public void RemoteOperation(DeviceCode deviceCode, byte operationCode, Dictionary<byte, object> operationParameters)
+        {
+            Dictionary<byte, object> parameters = new Dictionary<byte, object>
+            {
+                { (byte)RemoteOperationParameterCode.DeviceCode, (byte)deviceCode },
+                { (byte)RemoteOperationParameterCode.OperationCode, operationCode },
+                { (byte)RemoteOperationParameterCode.Parameters, operationParameters }
+            };
+            SendOperation(PlayerOperationCode.RemoteOperation, parameters);
         }
     }
 }

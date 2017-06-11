@@ -2,6 +2,7 @@
 {
     public enum PlayerOperationCode : byte
     {
-        FetchData
+        FetchData,
+        RemoteOperation
     }
 }

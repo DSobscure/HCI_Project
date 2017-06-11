@@ -80,7 +80,7 @@ namespace HCI_Project.Server
         private void AssemblyPlayerEvents(Player player)
         {
             player.OnHeadDeviceConnectedChanged += player.EventManager.SyncDataBroker.SyncHeadDeviceConnected;
-            player.OnHandDeviceConnectedChanged += player.EventManager.SyncDataBroker.SyncHandDeviceConnected;
+            player.OnHandTakeDeviceConnectedChanged += player.EventManager.SyncDataBroker.SyncHandTakeDeviceConnected;
             player.OnDeviceRemoved += Player_OnDeviceRemoved;
         }
 
@@ -95,7 +95,7 @@ namespace HCI_Project.Server
         private void DisassemblyPlayerEvents(Player player)
         {
             player.OnHeadDeviceConnectedChanged -= player.EventManager.SyncDataBroker.SyncHeadDeviceConnected;
-            player.OnHandDeviceConnectedChanged -= player.EventManager.SyncDataBroker.SyncHandDeviceConnected;
+            player.OnHandTakeDeviceConnectedChanged -= player.EventManager.SyncDataBroker.SyncHandTakeDeviceConnected;
             player.OnDeviceRemoved -= Player_OnDeviceRemoved;
         }
     }

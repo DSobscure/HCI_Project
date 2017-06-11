@@ -11,7 +11,7 @@ namespace HCI_Project.Library.CommunicationInfrastructure.Event.Handlers.Player
         internal PlayerSyncDataBroker(Library.Player subject) : base(subject)
         {
             syncTable.Add(PlayerSyncDataCode.HeadDeviceConnected, new SyncHeadDeviceConnectedHandler(subject));
-            syncTable.Add(PlayerSyncDataCode.HandDeviceConnected, new SyncHandDeviceConnectedHandler(subject));
+            syncTable.Add(PlayerSyncDataCode.HandTakeDeviceConnected, new SyncHandTakeDeviceConnectedHandler(subject));
         }
 
         internal override void SendSyncData(PlayerSyncDataCode syncCode, Dictionary<byte, object> parameters)
@@ -27,13 +27,13 @@ namespace HCI_Project.Library.CommunicationInfrastructure.Event.Handlers.Player
             };
             SendSyncData(PlayerSyncDataCode.HeadDeviceConnected, parameters);
         }
-        public void SyncHandDeviceConnected(Library.Player player)
+        public void SyncHandTakeDeviceConnected(Library.Player player)
         {
             var parameters = new Dictionary<byte, object>
             {
-                { (byte)SyncHandDeviceConnectedParameterCode.Connected, player.HandDeviceConnected },
+                { (byte)SyncHandTakeDeviceConnectedParameterCode.Connected, player.HandTakeDeviceConnected },
             };
-            SendSyncData(PlayerSyncDataCode.HandDeviceConnected, parameters);
+            SendSyncData(PlayerSyncDataCode.HandTakeDeviceConnected, parameters);
         }
     }
 }

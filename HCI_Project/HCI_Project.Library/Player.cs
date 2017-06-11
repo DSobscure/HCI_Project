@@ -26,16 +26,18 @@ namespace HCI_Project.Library
             }
         }
 
-        private bool handDeviceConnected;
-        public bool HandDeviceConnected
+        private bool handTakeDeviceConnected;
+        public bool HandTakeDeviceConnected
         {
-            get { return handDeviceConnected; }
+            get { return handTakeDeviceConnected; }
             set
             {
-                handDeviceConnected = value;
-                OnHandDeviceConnectedChanged?.Invoke(this);
+                handTakeDeviceConnected = value;
+                OnHandTakeDeviceConnectedChanged?.Invoke(this);
             }
         }
+
+
 
         public PlayerEventManager EventManager { get; private set; }
         public PlayerRequestManager RequestManager { get; private set; }
@@ -43,7 +45,7 @@ namespace HCI_Project.Library
 
         public event Action<Player, Device> OnDeviceRemoved;
         public event Action<Player> OnHeadDeviceConnectedChanged;
-        public event Action<Player> OnHandDeviceConnectedChanged;
+        public event Action<Player> OnHandTakeDeviceConnectedChanged;
 
         public Player(string nickname)
         {
@@ -64,8 +66,8 @@ namespace HCI_Project.Library
                 case DeviceCode.Head:
                     HeadDeviceConnected = true;
                     break;
-                case DeviceCode.Hand:
-                    HandDeviceConnected = true;
+                case DeviceCode.HandTake:
+                    HandTakeDeviceConnected = true;
                     break;
             }
             deviceDictionary.Add(device, deviceCode);
@@ -81,8 +83,8 @@ namespace HCI_Project.Library
                     case DeviceCode.Head:
                         HeadDeviceConnected = deviceDictionary.Values.Any(x => x == DeviceCode.Head);
                         break;
-                    case DeviceCode.Hand:
-                        HandDeviceConnected = deviceDictionary.Values.Any(x => x == DeviceCode.Hand);
+                    case DeviceCode.HandTake:
+                        HandTakeDeviceConnected = deviceDictionary.Values.Any(x => x == DeviceCode.HandTake);
                         break;
                 }
                 OnDeviceRemoved?.Invoke(this, device);

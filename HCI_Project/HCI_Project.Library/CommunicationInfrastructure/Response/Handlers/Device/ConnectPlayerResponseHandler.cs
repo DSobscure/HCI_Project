@@ -36,12 +36,12 @@ namespace HCI_Project.Library.CommunicationInfrastructure.Response.Handlers.Devi
             {
                 string nickname = (string)parameters[(byte)ConnectPlayerResponseParameterCode.Nickname];
                 bool headDeviceConnected = (bool)parameters[(byte)ConnectPlayerResponseParameterCode.HeadDeviceConnected];
-                bool handDeviceConnected = (bool)parameters[(byte)ConnectPlayerResponseParameterCode.HandDeviceConnected];
+                bool handDeviceConnected = (bool)parameters[(byte)ConnectPlayerResponseParameterCode.HandTakeDeviceConnected];
 
                 Library.Player player = new Library.Player(nickname);
                 subject.AddPlayer(player, DeviceCode.DontCare);
                 player.HeadDeviceConnected = headDeviceConnected;
-                player.HandDeviceConnected = handDeviceConnected;
+                player.HandTakeDeviceConnected = handDeviceConnected;
                 return true;
             }
             else

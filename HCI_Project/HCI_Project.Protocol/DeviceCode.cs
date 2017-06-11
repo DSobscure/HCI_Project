@@ -3,7 +3,7 @@
     public enum DeviceCode : byte
     {
         Head,
-        Hand,
+        HandTake,
         DontCare
     }
 }
