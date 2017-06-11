@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using HCI_Project.Library;
 
 public class AvatarUI : MonoBehaviour
 {
@@ -53,21 +54,21 @@ public class AvatarUI : MonoBehaviour
         damaged = false;
     }
 
-    private void UpdateHP(Avatar avatar)
+    private void UpdateHP(HCI_Project.Library.Avatar avatar)
     {
         if (avatar.HP / (float)avatar.MaxHP < hpScrollbar.size)
             damaged = true;
         hpScrollbar.size = avatar.HP / (float)avatar.MaxHP;
     }
-    private void UpdateMP(Avatar avatar)
+    private void UpdateMP(HCI_Project.Library.Avatar avatar)
     {
         mpScrollbar.size = avatar.MP / (float)avatar.MaxMP;
     }
-    private void UpdateLevel(Avatar avatar)
+    private void UpdateLevel(HCI_Project.Library.Avatar avatar)
     {
         levelText.text = avatar.Level.ToString();
     }
-    private void UpdateEXP(Avatar avatar)
+    private void UpdateEXP(HCI_Project.Library.Avatar avatar)
     {
         expFill.localPosition = new Vector3(0, -expFill.sizeDelta.y * (1 - avatar.EXP / (float)avatar.MaxEXP), 0);
     }

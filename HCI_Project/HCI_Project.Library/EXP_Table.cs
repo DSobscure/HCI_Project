@@ -7,9 +7,9 @@ namespace HCI_Project.Library
         private static List<int> expTable = new List<int>();
         static EXP_Table()
         {
-            for(int i = 0; i < 50; i++)
+            for(int i = 0; i < 25; i++)
             {
-                //expTable.Add();
+                expTable.Add(40 * i * i + 150 * i + 100);
             }
         }
         public static int EXP(int level)
@@ -20,7 +20,7 @@ namespace HCI_Project.Library
             }
             else
             {
-                return expTable[level];
+                return expTable[level - 1];
             }
         }
     }
