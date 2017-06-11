@@ -10,6 +10,7 @@ public static class Global
     public static DeviceCode DeviceCode { get; set; }
     public static Avatar Avatar { get; set; }
     public static Game Game { get; set; }
+    public static int vrCounter = 0;
 
     static Global()
     {
