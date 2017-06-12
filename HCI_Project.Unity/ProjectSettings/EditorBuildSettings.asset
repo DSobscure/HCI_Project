@@ -20,6 +20,9 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/Game_Head.unity
     guid: 29aec8f8484a0d648b318af7339bcc1e
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Game_HandTake.unity
     guid: 22496ae0e6d85e044b41fb15c8035ed7
+  - enabled: 1
+    path: Assets/setup_map.unity
+    guid: 66fc6640be831d4499642196e925653c

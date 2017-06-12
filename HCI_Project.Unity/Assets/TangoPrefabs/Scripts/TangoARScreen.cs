@@ -381,7 +381,7 @@ public class TangoARScreen : MonoBehaviour, ITangoLifecycle, ITangoCameraTexture
             // image must fill that camera's viewport.  That means we must clip the color camera image to make
             // its ratio the same as the Unity camera.  If we don't do this the color camera image will be
             // stretched non-uniformly, making a circle into an ellipse.
-            float widthRatio = (float)cameraWidth / (float)alignedIntrinsics.width / 2;
+            float widthRatio = (float)cameraWidth / (float)alignedIntrinsics.width;
             float heightRatio = (float)cameraHeight / (float)alignedIntrinsics.height;
 
             if (widthRatio >= heightRatio)
