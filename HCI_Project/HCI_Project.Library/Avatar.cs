@@ -120,6 +120,7 @@ namespace HCI_Project.Library
             MP = 100;
             ManaRecovery = 20;
             ManaConsumption = 10;
+            ManaConsumptionDiscountRatio = 1;
             Damage = 10;
             MissileSpeed = 1;
             ReloadTimeSpan = 0.1f;

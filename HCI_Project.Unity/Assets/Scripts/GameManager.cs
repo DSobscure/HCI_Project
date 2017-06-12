@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-	void Start ()
+	void Awake ()
     {
-        Game game = new Game();
+        HCI_Project.Library.Game game = new HCI_Project.Library.Game();
         Global.Game = game;
     }
 }

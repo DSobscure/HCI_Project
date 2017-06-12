@@ -15,7 +15,7 @@ public class AvatarUI : MonoBehaviour
 
     private void Start()
     {
-        Avatar avatar = Global.Avatar;
+        HCI_Project.Library.Avatar avatar = Global.Avatar;
         avatar.OnHP_Changed += UpdateHP;
         avatar.OnMaxHP_Changed += UpdateHP;
         avatar.OnMP_Changed += UpdateMP;
@@ -31,7 +31,7 @@ public class AvatarUI : MonoBehaviour
     }
     private void OnDestroy()
     {
-        Avatar avatar = Global.Avatar;
+        HCI_Project.Library.Avatar avatar = Global.Avatar;
         avatar.OnHP_Changed -= UpdateHP;
         avatar.OnMaxHP_Changed -= UpdateHP;
         avatar.OnMP_Changed -= UpdateMP;

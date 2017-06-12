@@ -54,7 +54,7 @@ public class AttackController : MonoBehaviour
         }
     }
 
-    public void Fire(Avatar avatar)
+    public void Fire(HCI_Project.Library.Avatar avatar)
     {
         reloadTimer = avatar.ReloadTimeSpan;
         gunLight.enabled = true;
@@ -71,18 +71,18 @@ public class AttackController : MonoBehaviour
         shootRay.direction = transform.forward;
 
         RaycastHit shootHit;
-        if (Physics.Raycast(shootRay, out shootHit, avatar.AttackRange, shootableMask))
+        if (Physics.Raycast(shootRay, out shootHit, 100, shootableMask))
         {
             CompleteProject.EnemyHealth enemyHealth = shootHit.collider.GetComponent<CompleteProject.EnemyHealth>();
             if (enemyHealth != null)
             {
-                enemyHealth.TakeDamage(avatar.AttackDamage, shootHit.point);
+                enemyHealth.TakeDamage(avatar.Damage, shootHit.point);
             }
             gunLine.SetPosition(1, shootHit.point);
         }
         else
         {
-            gunLine.SetPosition(1, shootRay.origin + shootRay.direction * avatar.AttackRange);
+            gunLine.SetPosition(1, shootRay.origin + shootRay.direction * 100);
         }
     }
 
