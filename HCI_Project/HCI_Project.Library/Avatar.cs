@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace HCI_Project.Library
 {
@@ -88,11 +90,15 @@ namespace HCI_Project.Library
 
         public float ManaRecovery { get; set; }       
         public int ManaConsumption { get; set; }
+        public float ManaConsumptionDiscountRatio { get; set; }
         public int Damage { get; set; }
         public float MissileSpeed { get; set; }
         public float ReloadTimeSpan { get; set; }
         public int MissileNumber { get; set; }
         public float　MissleRadius { get; set; }
+
+        private List<Skill.Skill> skills = new List<Skill.Skill>();
+        public IEnumerable<Skill.Skill> Skills { get { return skills; } }
 
         public event Action<Avatar> OnLevelChanged;
         public event Action<Avatar> OnMaxEXP_Changed;
@@ -106,25 +112,43 @@ namespace HCI_Project.Library
 
         public Avatar()
         {
-            AttackRange = 100;
             Level = 1;
-            MaxEXP = 100;
-            MaxHP = 100;
-            HP = 100;
-            MaxMP = 50;
-            MP = 50;
-            Damage = 25;
+            MaxEXP = EXP_Table.EXP(1);
+            MaxHP = 50;
+            HP = 50;
+            MaxMP = 100;
+            MP = 100;
+            ManaRecovery = 20;
             ManaConsumption = 10;
-            ReloadTimeSpan = 0.15f;
+            ManaConsumptionDiscountRatio = 1;
+            Damage = 10;
+            MissileSpeed = 1;
+            ReloadTimeSpan = 0.1f;
+            MissileNumber = 1;
+            MissleRadius = 0.1f;
         }
 
         public void Attack()
         {
-            if (MP >= ManaConsumption)
+            if (MP >= ManaConsumption * ManaConsumptionDiscountRatio)
             {
-                MP -= ManaConsumption;
+                MP -= ManaConsumption * ManaConsumptionDiscountRatio;
                 OnAttack?.Invoke(this);
             }
+        }
+
+        public void UpgradeSkill(Skill.Skill skill, out Skill.Skill originalSkill)
+        {
+            if(Skills.Any(x => x.SkillCode == skill.SkillCode))
+            {
+                originalSkill = Skills.First(x => x.SkillCode == skill.SkillCode);
+                skills.Remove(originalSkill);
+            }
+            else
+            {
+                originalSkill = null;
+            }
+            skills.Add(skill);
         }
     }
 }

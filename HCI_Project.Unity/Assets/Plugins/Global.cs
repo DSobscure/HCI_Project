@@ -8,7 +8,7 @@ public static class Global
     public static Device Device { get; set; }
     public static Player Player { get; set; }
     public static DeviceCode DeviceCode { get; set; }
-    public static Avatar Avatar { get; set; }
+    public static HCI_Project.Library.Avatar Avatar { get; set; }
     public static Game Game { get; set; }
     public static int vrCounter = 0;
 
