@@ -11,7 +11,7 @@ public class AvatarController : MonoBehaviour
     // Use this for initialization
     void Awake ()
     {
-        Avatar avatar = new Avatar();
+        HCI_Project.Library.Avatar avatar = new HCI_Project.Library.Avatar();
         Global.Avatar = avatar;
 
         avatar.OnHP_Changed += Avatar_OnHP_Changed;
@@ -24,12 +24,12 @@ public class AvatarController : MonoBehaviour
         StartCoroutine(Restore());
     }
 
-    private void Avatar_OnLevelChanged(Avatar avatar)
+    private void Avatar_OnLevelChanged(HCI_Project.Library.Avatar avatar)
     {
-        avatar.AttackDamage += 5;
+        
     }
 
-    private void Avatar_OnHP_Changed(Avatar avatar)
+    private void Avatar_OnHP_Changed(HCI_Project.Library.Avatar avatar)
     {
         if(avatar.HP <= 0)
         {

@@ -54,6 +54,7 @@ public class TangoPoseController : MonoBehaviour
     /// to the Move method of 'm_characterController' rather applied directly to the
     /// transform.
     /// </summary>
+    [SerializeField]
     private CharacterController m_characterController;
 
     /// <summary>
@@ -114,7 +115,7 @@ public class TangoPoseController : MonoBehaviour
         }
 
         m_tangoARScreen = GetComponent<TangoARScreen>();
-        m_characterController = GetComponent<CharacterController>();
+        //m_characterController = GetComponent<CharacterController>();
     }
 
     /// <summary>
@@ -203,7 +204,7 @@ public class TangoPoseController : MonoBehaviour
         // Apply the final position.
         if (m_characterController)
         {
-            m_characterController.Move(finalPosition - transform.position);
+            m_characterController.Move(transform.position - finalPosition);
         }
         else
         {
