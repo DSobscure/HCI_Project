@@ -38,7 +38,7 @@ public class AttackController : MonoBehaviour
         reloadTimer -= Time.deltaTime;
 
 #if MOBILE_INPUT
-        if ((CrossPlatformInputManager.GetAxisRaw("Mouse X") != 0 || CrossPlatformInputManager.GetAxisRaw("Mouse Y") != 0) && timer >= timeBetweenBullets)
+        if ((CrossPlatformInputManager.GetAxisRaw("Mouse X") != 0 || CrossPlatformInputManager.GetAxisRaw("Mouse Y") != 0) && reloadTimer <= 0 && Time.timeScale != 0)
         {
             Global.Avatar.Attack();
         }        
