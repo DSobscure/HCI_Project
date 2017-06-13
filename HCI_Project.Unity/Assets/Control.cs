@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Linq;
 using System.Collections.Generic;
 using Tango;
 using UnityEngine;
@@ -8,25 +9,27 @@ public class Control : MonoBehaviour, ITangoLifecycle, ITangoDepth {
     public TangoPointCloud m_pointCloud;
     private TangoARPoseController m_tangoARPoseController;
     private TangoApplication m_tangoApplication;
-    private bool waitDepthAvailable;
     #endregion
 
     #region detect variables
-    private int m_detectScreenPointCount = 5;
-    private Vector2[] m_detectScreenPoint = new Vector2[5];
+    private bool waitDepthAvailable;
     private Vector3 m_previousPosition = new Vector3(0, 0, 0);
     #endregion
 
     #region game variables;
-    public GameObject m_marker;
-    public GameObject m_floorHole;
-    public GameObject m_floorObstacle;
-    public GameObject m_wallHole;
-    public GameObject m_monster;
-    private List<GameObject> m_floorHoles = new List<GameObject>();
-    private List<GameObject> m_floorObstacles = new List<GameObject>();
-    private List<GameObject> m_wallHoles = new List<GameObject>();
-    private List<GameObject> m_monsters = new List<GameObject>();
+    public GameObject m_ZomBunnyHole;
+    public GameObject m_ZomBearHole;
+    public GameObject m_Obstacle;
+    public GameObject m_HellephantHole;
+
+    private List<GameObject> m_ZomBunnyHoles = new List<GameObject>();
+    private List<GameObject> m_ZomBearHoles = new List<GameObject>();
+    private List<GameObject> m_Obstacles = new List<GameObject>();
+    private List<GameObject> m_HellephantHoles = new List<GameObject>();
+
+    private Vector3 m_xAxis = new Vector3(1, 0, 0);
+    private Vector3 m_xNagetiveAxis = new Vector3(-1, 0, 0);
+    private Vector3 m_yAxis = new Vector3(0, 1, 0);
     #endregion
 
     // Use this for initialization
@@ -35,12 +38,6 @@ public class Control : MonoBehaviour, ITangoLifecycle, ITangoDepth {
         m_tangoARPoseController = FindObjectOfType<TangoARPoseController>();
         m_tangoApplication.Register(this);
         m_tangoApplication.RequestPermissions();
-        
-        m_detectScreenPoint[0] = new Vector2(Screen.width / 2.0f, Screen.height / 6.0f);
-        m_detectScreenPoint[1] = new Vector2(Screen.width / 6.0f, Screen.height / 2.0f);
-        m_detectScreenPoint[2] = new Vector2(Screen.width / 2.0f, Screen.height / 2.0f);
-        m_detectScreenPoint[3] = new Vector2(5 * Screen.width / 6.0f, Screen.height / 2.0f);
-        m_detectScreenPoint[4] = new Vector2(Screen.width / 2.0f, 5 * Screen.height / 6.0f);
 	}
 	
 	// Update is called once per frame
@@ -50,33 +47,66 @@ public class Control : MonoBehaviour, ITangoLifecycle, ITangoDepth {
         {
             AndroidHelper.AndroidQuit();
         }
-        if(Vector3.Distance(m_tangoARPoseController.m_tangoPosition, m_previousPosition) > 3)
+
+        if(Vector3.Distance(m_tangoARPoseController.m_tangoPosition, m_previousPosition) > 1.5f)
         {
             m_previousPosition = m_tangoARPoseController.m_tangoPosition;
+
+            foreach(var target in m_ZomBunnyHoles.Where(x => Vector3.Distance(m_previousPosition, x.transform.position) > 5.0f).ToArray())
+            {
+                m_ZomBunnyHoles.Remove(target);
+                Destroy(target);
+            }
+
+            foreach (var target in m_ZomBearHoles.Where(x => Vector3.Distance(m_previousPosition, x.transform.position) > 5.0f).ToArray())
+            {
+                m_ZomBearHoles.Remove(target);
+                Destroy(target);
+            }
+
+            foreach (var target in m_HellephantHoles.Where(x => Vector3.Distance(m_previousPosition, x.transform.position) > 5.0f).ToArray())
+            {
+                m_HellephantHoles.Remove(target);
+                Destroy(target);
+            }
+
+            foreach (var target in m_Obstacles.Where(x => Vector3.Distance(m_previousPosition, x.transform.position) > 5.0f).ToArray())
+            {
+                m_Obstacles.Remove(target);
+                Destroy(target);
+            }
+
             StartCoroutine(WaitForDepthAndDetectPlanes());
         }
+       
         //GetInput();
     }
 
     public void OnDestroy()
     {
-        for(int i=m_floorHoles.Count-1; i>=0; i--)
+        for (int i = m_ZomBunnyHoles.Count - 1; i >= 0; i--) 
         {
-            Destroy(m_floorHoles[i]);
+            Destroy(m_ZomBunnyHoles[i]);
         }
-        m_floorHoles.Clear();
+        m_ZomBunnyHoles.Clear();
 
-        for(int i=m_floorObstacles.Count-1; i>=0; i--)
+        for (int i = m_ZomBearHoles.Count - 1; i >= 0; i--) 
         {
-            Destroy(m_floorObstacles[i]);
+            Destroy(m_ZomBearHoles[i]);
         }
-        m_floorObstacles.Clear();
+        m_ZomBearHoles.Clear();
 
-        for(int i=m_wallHoles.Count-1; i>=0; i--)
+        for (int i = m_HellephantHoles.Count - 1; i >= 0; i--) 
         {
-            Destroy(m_wallHoles[i]);
+            Destroy(m_HellephantHoles[i]);
         }
-        m_wallHoles.Clear();
+        m_HellephantHoles.Clear();
+
+        for (int i = m_Obstacles.Count - 1; i >= 0; i--) 
+        {
+            Destroy(m_Obstacles[i]);
+        }
+        m_Obstacles.Clear(); 
 
         m_tangoApplication.Unregister(this);
     }
@@ -136,37 +166,47 @@ public class Control : MonoBehaviour, ITangoLifecycle, ITangoDepth {
         Camera cam = Camera.main;
         Vector3 planeCenter;
         Plane findedPlane;
-        for(int i=0; i<m_detectScreenPointCount; i++)
+        for(int i=0; i<2; i++)
         {
-            if(m_pointCloud.FindPlane(cam, m_detectScreenPoint[i], out planeCenter, out findedPlane))
+            for(int j=0; j<2; j++)
             {
-                Vector3 forward;
-                if(Vector3.Angle(findedPlane.normal, cam.transform.forward) < 170)
+                Vector2 point = new Vector2((i + Random.value) * Screen.width / 2, (j + Random.value) * Screen.height / 2);
+                if(m_pointCloud.FindPlane(cam, point, out planeCenter, out findedPlane))
                 {
-                    forward = Vector3.Cross(Vector3.Cross(findedPlane.normal, cam.transform.forward).normalized, findedPlane.normal).normalized;
-                }
-                else
-                {
-                    forward = Vector3.Cross(findedPlane.normal, cam.transform.right);
-                }
-
-                if(Vector3.Angle(findedPlane.normal, new Vector3(0, 1, 0)) < 80)
-                {
-                    if (Random.value < 0.5)
+                    Vector3 forward;
+                
+                    if (Vector3.Angle(findedPlane.normal, cam.transform.forward) < 175)
                     {
-                        m_floorHoles.Add(Instantiate(m_floorHole, planeCenter, Quaternion.LookRotation(forward, findedPlane.normal)));
+                        forward = Vector3.Cross(Vector3.Cross(findedPlane.normal, cam.transform.forward).normalized, findedPlane.normal).normalized;
                     }
                     else
                     {
-                        m_floorObstacles.Add(Instantiate(m_floorObstacle, planeCenter, Quaternion.LookRotation(forward, findedPlane.normal)));
+                        forward = Vector3.Cross(findedPlane.normal, cam.transform.right);
+                    }
+
+                    float angle = Vector3.Angle(findedPlane.normal, m_yAxis);
+                    if (angle < 80.0f)
+                    {
+                        if (Random.value < 0.4)
+                        {
+                            m_ZomBunnyHoles.Add(Instantiate(m_ZomBunnyHole, planeCenter, Quaternion.LookRotation(forward, findedPlane.normal)));
+                        }
+                        else if (Random.value < 0.8)
+                        {
+                            m_ZomBearHoles.Add(Instantiate(m_ZomBearHole, planeCenter, Quaternion.LookRotation(forward, findedPlane.normal)));
+                        }
+                        else
+                        {
+                            m_Obstacles.Add(Instantiate(m_Obstacle, planeCenter, Quaternion.LookRotation(forward, findedPlane.normal)));
+                        }
+                    }
+                    else if (angle < 110.0f) 
+                    {
+                        m_HellephantHoles.Add(Instantiate(m_HellephantHole, planeCenter, Quaternion.LookRotation(forward, findedPlane.normal)));
                     }
                 }
-                else if(Vector3.Angle(findedPlane.normal, new Vector3(1, 0, 0))<80 || Vector3.Angle(findedPlane.normal, new Vector3(-1, 0, 0)) < 80)
-                {
-                    m_wallHoles.Add(Instantiate(m_wallHole, planeCenter, Quaternion.LookRotation(forward, findedPlane.normal)));
-                }
+                yield return null;
             }
-            yield return null;
         }
     }
 
@@ -195,6 +235,6 @@ public class Control : MonoBehaviour, ITangoLifecycle, ITangoDepth {
         {
             forward = Vector3.Cross(up, cam.transform.right);
         }
-        Instantiate(m_marker, planeCenter, Quaternion.LookRotation(forward, up));
+        //Instantiate(m_marker, planeCenter, Quaternion.LookRotation(forward, up));
     }
 }
