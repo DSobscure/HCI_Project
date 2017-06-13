@@ -2,17 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Gamer : MonoBehaviour {
+public class Gamer : MonoBehaviour
+{
 
     public Camera m_camera;
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-        this.transform.position = m_camera.transform.position;
-	}
+	void Update ()
+    {
+        var arTransform = m_camera.transform;
+        transform.position = new Vector3(arTransform.position.x, transform.position.y, arTransform.position.z);
+        transform.rotation = arTransform.rotation;//Quaternion.Euler(0, arTransform.rotation.eulerAngles.y, arTransform.rotation.eulerAngles.z);
+    }
 }
