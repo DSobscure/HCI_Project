@@ -42,6 +42,13 @@ namespace CompleteProject
             }
         }
 
+        private void OnCollisionEnter(Collision collision)
+        {
+            if(collision.transform.parent != null && collision.transform.parent.tag == "Fire")
+            {
+                TakeDamage(Global.Avatar.Damage, collision.contacts[0].point);
+            }
+        }
 
         public void TakeDamage (int amount, Vector3 hitPoint)
         {

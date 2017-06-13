@@ -12,7 +12,15 @@ namespace HCI_Project.Library
             get { return level; }
             set
             {
-                level = value;
+                if (value > level)
+                {
+                    level = value;
+                    LevelUpEvent();
+                }
+                else
+                {
+                    level = value;
+                }
                 OnLevelChanged?.Invoke(this);
             }
         }
@@ -119,11 +127,11 @@ namespace HCI_Project.Library
             MaxMP = 100;
             MP = 100;
             ManaRecovery = 20;
-            ManaConsumption = 10;
+            ManaConsumption = 5;
             ManaConsumptionDiscountRatio = 1;
             Damage = 10;
-            MissileSpeed = 1;
-            ReloadTimeSpan = 0.1f;
+            MissileSpeed = 15;
+            ReloadTimeSpan = 0.2f;
             MissileNumber = 1;
             MissleRadius = 0.1f;
         }
@@ -149,6 +157,12 @@ namespace HCI_Project.Library
                 originalSkill = null;
             }
             skills.Add(skill);
+        }
+        private void LevelUpEvent()
+        {
+            HP = MaxHP;
+            MP = MaxMP;
+            MaxEXP = EXP_Table.EXP(Level);
         }
     }
 }

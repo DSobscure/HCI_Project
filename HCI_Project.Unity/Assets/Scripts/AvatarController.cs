@@ -1,9 +1,13 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
+using HCI_Project.Library.Skill;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class AvatarController : MonoBehaviour
 {
+    [SerializeField]
+    private SkillSelectPanel skillSelectPanel;
+
     Animator anim;
     CompleteProject.PlayerMovement playerMovement;
     AttackController attackController;
@@ -26,17 +30,18 @@ public class AvatarController : MonoBehaviour
 
     private void Avatar_OnLevelChanged(HCI_Project.Library.Avatar avatar)
     {
-        
+        skillSelectPanel.Show(SkillTable.RandomTakeUpgradableSkills(avatar, 3));
+        Time.timeScale = 0;
     }
 
     private void Avatar_OnHP_Changed(HCI_Project.Library.Avatar avatar)
     {
         if(avatar.HP <= 0)
         {
-            attackController.DisableEffects();
             anim.SetTrigger("Die");
             playerMovement.enabled = false;
             attackController.enabled = false;
+            StartCoroutine(Restart());
         }
     }
 
@@ -45,7 +50,12 @@ public class AvatarController : MonoBehaviour
         while(true)
         {
             yield return new WaitForSeconds(0.1f);
-            Global.Avatar.MP += 5;
+            Global.Avatar.MP += Global.Avatar.ManaRecovery * 0.1f;
         }
+    }
+    IEnumerator Restart()
+    {
+        yield return new WaitForSeconds(5f);
+        SceneManager.LoadScene("Game_Head");
     }
 }

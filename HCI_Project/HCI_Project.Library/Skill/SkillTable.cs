@@ -51,19 +51,19 @@ namespace HCI_Project.Library.Skill
             } },
             { SkillCode.MissileSpeedUp, new List<Skill>
             {
-                new MissileSpeedUpSkill(26, 1, "FlashMissile 1", 1.2f, 2),
-                new MissileSpeedUpSkill(27, 2, "FlashMissile 2", 1.6f, 6),
-                new MissileSpeedUpSkill(28, 3, "FlashMissile 3", 2f, 10),
-                new MissileSpeedUpSkill(29, 4, "FlashMissile 4", 2.5f, 14),
-                new MissileSpeedUpSkill(30, 5, "FlashMissile 5", 4f, 20),
+                new MissileSpeedUpSkill(26, 1, "FlashMissile 1", 20, 2),
+                new MissileSpeedUpSkill(27, 2, "FlashMissile 2", 25, 6),
+                new MissileSpeedUpSkill(28, 3, "FlashMissile 3", 30, 10),
+                new MissileSpeedUpSkill(29, 4, "FlashMissile 4", 35, 14),
+                new MissileSpeedUpSkill(30, 5, "FlashMissile 5", 40, 20),
             } },
             { SkillCode.MissileNumberUp, new List<Skill>
             {
-                new MissileNumberUpSkill(26, 1, "MutiMissile 1", 2, 8),
-                new MissileNumberUpSkill(27, 2, "MutiMissile 2", 3, 14),
-                new MissileNumberUpSkill(28, 3, "MutiMissile 3", 4, 20),
-                new MissileNumberUpSkill(29, 4, "MutiMissile 4", 5, 30),
-                new MissileNumberUpSkill(30, 5, "MutiMissile 5", 6, 48),
+                new MissileNumberUpSkill(26, 1, "MutiMissile 1", 3, 8),
+                new MissileNumberUpSkill(27, 2, "MutiMissile 2", 5, 14),
+                new MissileNumberUpSkill(28, 3, "MutiMissile 3", 7, 20),
+                new MissileNumberUpSkill(29, 4, "MutiMissile 4", 9, 30),
+                new MissileNumberUpSkill(30, 5, "MutiMissile 5", 11, 48),
             } },
             { SkillCode.MissileSizeUp, new List<Skill>
             {
