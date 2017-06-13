@@ -23,6 +23,6 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Game_HandTake.unity
     guid: 22496ae0e6d85e044b41fb15c8035ed7
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/setup_map.unity
     guid: 66fc6640be831d4499642196e925653c
