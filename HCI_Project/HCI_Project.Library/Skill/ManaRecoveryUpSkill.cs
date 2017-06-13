@@ -10,7 +10,7 @@ namespace HCI_Project.Library.Skill
         {
             get
             {
-                return $"魔力回復 +{(int)(RecoveryRatio - 1) * 100}%";
+                return $"魔力回復 +{(int)((RecoveryRatio - 1) * 100)}%";
             }
         }
 

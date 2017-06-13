@@ -9,7 +9,7 @@ namespace HCI_Project.Library
         {
             for(int i = 0; i < 25; i++)
             {
-                expTable.Add(40 * i * i + 150 * i + 100);
+                expTable.Add(20 * i * i + 100 * i + 100);
             }
         }
         public static int EXP(int level)
