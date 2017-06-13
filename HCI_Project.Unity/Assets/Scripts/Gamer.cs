@@ -11,6 +11,5 @@ public class Gamer : MonoBehaviour
     {
         var arTransform = m_camera.transform;
         transform.position = new Vector3(arTransform.position.x, arTransform.position.y, arTransform.position.z);
-        //transform.rotation = arTransform.rotation;//Quaternion.Euler(0, arTransform.rotation.eulerAngles.y, arTransform.rotation.eulerAngles.z);
     }
 }

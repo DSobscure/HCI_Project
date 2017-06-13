@@ -7,6 +7,7 @@ public class AttackController : MonoBehaviour
     float reloadTimer = 0;
     [SerializeField]
     private FireProjectileScript fireballPrefab;
+    public Camera m_camera;
 
     void Start()
     {
@@ -16,33 +17,21 @@ public class AttackController : MonoBehaviour
 
     private void EventManager_OnRemoteOperation(HCI_Project.Protocol.DeviceCode deviceCode, byte operationCode, System.Collections.Generic.Dictionary<byte, object> parameters)
     {
-        if(deviceCode == HCI_Project.Protocol.DeviceCode.Head)
+        if(deviceCode == HCI_Project.Protocol.DeviceCode.HandTake)
         {
             if((RemoteOperationCode)operationCode == RemoteOperationCode.Fire)
             {
-                Global.Avatar.Attack();
+                if(reloadTimer <= 0 && Time.timeScale != 0)
+                    Global.Avatar.Attack();
             }
         }
     }
 
     void Update()
     {
+        transform.rotation = m_camera.transform.rotation;
         // Add the time since Update was last called to the timer.
         reloadTimer -= Time.deltaTime;
-
-#if MOBILE_INPUT
-        if ((CrossPlatformInputManager.GetAxisRaw("Mouse X") != 0 || CrossPlatformInputManager.GetAxisRaw("Mouse Y") != 0) && reloadTimer <= 0 && Time.timeScale != 0)
-        {
-            Global.Player.RequestManager.RemoteOperation(HCI_Project.Protocol.DeviceCode.Head, (byte)RemoteOperationCode.Fire, new System.Collections.Generic.Dictionary<byte, object>());
-            //Global.Avatar.Attack();
-        }        
-#else
-        if (Input.GetButton("Fire1") && reloadTimer <= 0 && Time.timeScale != 0)
-        {
-            Global.Player.RequestManager.RemoteOperation(HCI_Project.Protocol.DeviceCode.Head, (byte)RemoteOperationCode.Fire, new System.Collections.Generic.Dictionary<byte, object>());
-            //Global.Avatar.Attack();
-        }
-#endif
     }
 
     public void Fire(HCI_Project.Library.Avatar avatar)
