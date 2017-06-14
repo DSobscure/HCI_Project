@@ -14,7 +14,7 @@ namespace HCI_Project.Library
         }
         public static int EXP(int level)
         {
-            if (level > expTable.Count)
+            if (level >= expTable.Count)
             {
                 return -1;
             }

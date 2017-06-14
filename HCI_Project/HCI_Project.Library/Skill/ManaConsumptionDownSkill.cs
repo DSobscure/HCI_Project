@@ -10,7 +10,7 @@ namespace HCI_Project.Library.Skill
         {
             get
             {
-                return $"魔力消耗 -{(int)((1 - DiscountRatio) * 100)}%";
+                return $"魔力消耗 -{((1 - DiscountRatio) * 100)}%";
             }
         }
 

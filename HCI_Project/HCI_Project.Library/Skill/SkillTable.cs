@@ -7,6 +7,7 @@ namespace HCI_Project.Library.Skill
 {
     public static class SkillTable
     {
+        private static Dictionary<int, Skill> skillDictionary = new Dictionary<int, Skill>();
         private static Dictionary<SkillCode, List<Skill>> skillTable = new Dictionary<SkillCode, List<Skill>>
         {
             { SkillCode.HealthUp, new List<Skill>
@@ -51,29 +52,41 @@ namespace HCI_Project.Library.Skill
             } },
             { SkillCode.MissileSpeedUp, new List<Skill>
             {
-                new MissileSpeedUpSkill(26, 1, "FlashMissile 1", 20, 2),
-                new MissileSpeedUpSkill(27, 2, "FlashMissile 2", 25, 6),
-                new MissileSpeedUpSkill(28, 3, "FlashMissile 3", 30, 10),
-                new MissileSpeedUpSkill(29, 4, "FlashMissile 4", 35, 14),
+                new MissileSpeedUpSkill(26, 1, "FlashMissile 1", 8, 2),
+                new MissileSpeedUpSkill(27, 2, "FlashMissile 2", 12, 6),
+                new MissileSpeedUpSkill(28, 3, "FlashMissile 3", 18, 10),
+                new MissileSpeedUpSkill(29, 4, "FlashMissile 4", 25, 14),
                 new MissileSpeedUpSkill(30, 5, "FlashMissile 5", 40, 20),
             } },
             { SkillCode.MissileNumberUp, new List<Skill>
             {
-                new MissileNumberUpSkill(26, 1, "MutiMissile 1", 3, 8),
-                new MissileNumberUpSkill(27, 2, "MutiMissile 2", 5, 14),
-                new MissileNumberUpSkill(28, 3, "MutiMissile 3", 7, 20),
-                new MissileNumberUpSkill(29, 4, "MutiMissile 4", 9, 30),
-                new MissileNumberUpSkill(30, 5, "MutiMissile 5", 11, 48),
+                new MissileNumberUpSkill(31, 1, "MutiMissile 1", 2, 8),
+                new MissileNumberUpSkill(32, 2, "MutiMissile 2", 3, 16),
+                new MissileNumberUpSkill(33, 3, "MutiMissile 3", 4, 24),
+                new MissileNumberUpSkill(34, 4, "MutiMissile 4", 5, 36),
+                new MissileNumberUpSkill(35, 5, "MutiMissile 5", 6, 50),
             } },
             { SkillCode.MissileSizeUp, new List<Skill>
             {
-                new MissileSizeUpSkill(26, 1, "Comet 1", 0.2f, 3),
-                new MissileSizeUpSkill(27, 2, "Comet 2", 0.3f, 8),
-                new MissileSizeUpSkill(28, 3, "Comet 3", 0.5f, 15),
-                new MissileSizeUpSkill(29, 4, "Comet 4", 0.8f, 20),
-                new MissileSizeUpSkill(30, 5, "Comet 5", 1f, 25),
+                new MissileSizeUpSkill(36, 1, "Comet 1", 0.15f, 3),
+                new MissileSizeUpSkill(37, 2, "Comet 2", 0.2f, 8),
+                new MissileSizeUpSkill(38, 3, "Comet 3", 0.3f, 15),
+                new MissileSizeUpSkill(39, 4, "Comet 4", 0.5f, 20),
+                new MissileSizeUpSkill(40, 5, "Comet 5", 1f, 25),
             } },
         };
+
+        static SkillTable()
+        {
+            foreach(var skills in skillTable.Values)
+            {
+                foreach(var skill in skills)
+                {
+                    skillDictionary.Add(skill.SkillID, skill);
+                }
+            }
+        }
+
         public static IEnumerable<Skill> UpgradableSkills(Avatar avatar)
         {
             List<Skill> skills = new List<Skill>();
@@ -96,6 +109,10 @@ namespace HCI_Project.Library.Skill
             IEnumerable<Skill> skills = UpgradableSkills(avatar);
             Random random = new Random();
             return skills.OrderBy(x => random.NextDouble()).Take(count);
+        }
+        public static Skill GetSkill(int skillID)
+        {
+            return skillDictionary[skillID];
         }
     }
 }
