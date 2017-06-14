@@ -11,7 +11,7 @@ namespace CompleteProject
         public GameObject m_ZomBear;
 
         private float m_frequency = 0.1f;
-        private float m_timeInterval = 10.0f;
+        private float m_timeInterval = 5.0f;
         private float m_time = 0.0f;
 
         void Start ()
@@ -51,10 +51,11 @@ namespace CompleteProject
         {
             while (true)
             {
-                yield return new WaitForSeconds(5);
+                yield return new WaitForSeconds(20);
                 Global.Game.Wave++;
                 m_frequency *= 1.2f;
                 m_timeInterval = 1.0f / m_frequency;
+                m_Control.GetComponent<Control>().m_timeInterval *= 0.9f;
             }
         }
     }

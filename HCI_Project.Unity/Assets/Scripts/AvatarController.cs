@@ -56,6 +56,6 @@ public class AvatarController : MonoBehaviour
     IEnumerator Restart()
     {
         yield return new WaitForSeconds(5f);
-        SceneManager.LoadScene("Game_Head");
+        SceneManager.LoadScene("Main_Head");
     }
 }

@@ -32,6 +32,17 @@ public class AttackController : MonoBehaviour
         transform.rotation = m_camera.transform.rotation;
         // Add the time since Update was last called to the timer.
         reloadTimer -= Time.deltaTime;
+#if MOBILE_INPUT
+        if ((CrossPlatformInputManager.GetAxisRaw("Mouse X") != 0 || CrossPlatformInputManager.GetAxisRaw("Mouse Y") != 0) && timer >= timeBetweenBullets)
+        {
+            Global.Avatar.Attack();
+        }        
+#else
+        if (Input.GetButton("Fire1") && reloadTimer <= 0 && Time.timeScale != 0)
+        {
+            Global.Avatar.Attack();
+        }
+#endif
     }
 
     public void Fire(HCI_Project.Library.Avatar avatar)
