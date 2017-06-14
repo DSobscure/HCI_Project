@@ -13,19 +13,19 @@ public class Control : MonoBehaviour, ITangoLifecycle, ITangoDepth {
 
     #region detect variables
     private bool waitDepthAvailable;
+    public float m_timeInterval = 10;
+    private float m_time = 0.0f;
     private Vector3 m_previousPosition = new Vector3(0, 0, 0);
     #endregion
 
     #region game variables;
     public GameObject m_ZomBunnyHole;
     public GameObject m_ZomBearHole;
-    public GameObject m_Obstacle;
     public GameObject m_HellephantHole;
 
-    private List<GameObject> m_ZomBunnyHoles = new List<GameObject>();
-    private List<GameObject> m_ZomBearHoles = new List<GameObject>();
-    private List<GameObject> m_Obstacles = new List<GameObject>();
-    private List<GameObject> m_HellephantHoles = new List<GameObject>();
+    public List<GameObject> m_ZomBunnyHoles = new List<GameObject>();
+    public List<GameObject> m_ZomBearHoles = new List<GameObject>();
+    public List<GameObject> m_HellephantHoles = new List<GameObject>();
 
     private Vector3 m_xAxis = new Vector3(1, 0, 0);
     private Vector3 m_xNagetiveAxis = new Vector3(-1, 0, 0);
@@ -38,7 +38,8 @@ public class Control : MonoBehaviour, ITangoLifecycle, ITangoDepth {
         m_tangoARPoseController = FindObjectOfType<TangoARPoseController>();
         m_tangoApplication.Register(this);
         m_tangoApplication.RequestPermissions();
-	}
+        
+    }
 	
 	// Update is called once per frame
 	void Update () {
@@ -48,38 +49,12 @@ public class Control : MonoBehaviour, ITangoLifecycle, ITangoDepth {
             AndroidHelper.AndroidQuit();
         }
 
-        if(Vector3.Distance(m_tangoARPoseController.m_tangoPosition, m_previousPosition) > 1.5f)
+        m_time += Time.deltaTime;
+        if (m_time > m_timeInterval)
         {
-            m_previousPosition = m_tangoARPoseController.m_tangoPosition;
-
-            foreach(var target in m_ZomBunnyHoles.Where(x => Vector3.Distance(m_previousPosition, x.transform.position) > 5.0f).ToArray())
-            {
-                m_ZomBunnyHoles.Remove(target);
-                Destroy(target);
-            }
-
-            foreach (var target in m_ZomBearHoles.Where(x => Vector3.Distance(m_previousPosition, x.transform.position) > 5.0f).ToArray())
-            {
-                m_ZomBearHoles.Remove(target);
-                Destroy(target);
-            }
-
-            foreach (var target in m_HellephantHoles.Where(x => Vector3.Distance(m_previousPosition, x.transform.position) > 5.0f).ToArray())
-            {
-                m_HellephantHoles.Remove(target);
-                Destroy(target);
-            }
-
-            foreach (var target in m_Obstacles.Where(x => Vector3.Distance(m_previousPosition, x.transform.position) > 5.0f).ToArray())
-            {
-                m_Obstacles.Remove(target);
-                Destroy(target);
-            }
-
+            m_time -= m_timeInterval;
             StartCoroutine(WaitForDepthAndDetectPlanes());
         }
-       
-        //GetInput();
     }
 
     public void OnDestroy()
@@ -101,12 +76,6 @@ public class Control : MonoBehaviour, ITangoLifecycle, ITangoDepth {
             Destroy(m_HellephantHoles[i]);
         }
         m_HellephantHoles.Clear();
-
-        for (int i = m_Obstacles.Count - 1; i >= 0; i--) 
-        {
-            Destroy(m_Obstacles[i]);
-        }
-        m_Obstacles.Clear(); 
 
         m_tangoApplication.Unregister(this);
     }
@@ -136,19 +105,6 @@ public class Control : MonoBehaviour, ITangoLifecycle, ITangoDepth {
         waitDepthAvailable = false;
     }
 
-    private void GetInput()
-    {
-        if(Input.touchCount==1)
-        {
-            Touch t = Input.GetTouch(0);
-            if(t.phase!=TouchPhase.Began)
-            {
-                return;
-            }
-            StartCoroutine(WaitForDepthAndFindPlane());
-        }
-    }
-
     private IEnumerator WaitForDepth()
     {
         waitDepthAvailable = true;
@@ -173,6 +129,11 @@ public class Control : MonoBehaviour, ITangoLifecycle, ITangoDepth {
                 Vector2 point = new Vector2((i + Random.value) * Screen.width / 2, (j + Random.value) * Screen.height / 2);
                 if(m_pointCloud.FindPlane(cam, point, out planeCenter, out findedPlane))
                 {
+                    if(Vector3.Distance(planeCenter, m_tangoARPoseController.m_tangoPosition) < 2.0f)
+                    {
+                        yield return null;
+                        continue;
+                    }
                     Vector3 forward;
                 
                     if (Vector3.Angle(findedPlane.normal, cam.transform.forward) < 175)
@@ -187,22 +148,21 @@ public class Control : MonoBehaviour, ITangoLifecycle, ITangoDepth {
                     float angle = Vector3.Angle(findedPlane.normal, m_yAxis);
                     if (angle < 80.0f)
                     {
-                        if (Random.value < 0.4)
+                        if (Random.value < 0.5)
                         {
                             m_ZomBunnyHoles.Add(Instantiate(m_ZomBunnyHole, planeCenter, Quaternion.LookRotation(forward, findedPlane.normal)));
-                        }
-                        else if (Random.value < 0.8)
-                        {
-                            m_ZomBearHoles.Add(Instantiate(m_ZomBearHole, planeCenter, Quaternion.LookRotation(forward, findedPlane.normal)));
+                            m_ZomBunnyHoles[m_ZomBunnyHoles.Count - 1].GetComponent<CompleteProject.HoleHealth>().allHoles = m_ZomBunnyHoles;
                         }
                         else
                         {
-                            m_Obstacles.Add(Instantiate(m_Obstacle, planeCenter, Quaternion.LookRotation(forward, findedPlane.normal)));
+                            m_ZomBearHoles.Add(Instantiate(m_ZomBearHole, planeCenter, Quaternion.LookRotation(forward, findedPlane.normal)));
+                            m_ZomBearHoles[m_ZomBearHoles.Count - 1].GetComponent<CompleteProject.HoleHealth>().allHoles = m_ZomBearHoles;
                         }
                     }
                     else if (angle < 110.0f) 
                     {
                         m_HellephantHoles.Add(Instantiate(m_HellephantHole, planeCenter, Quaternion.LookRotation(forward, findedPlane.normal)));
+                        m_HellephantHoles[m_HellephantHoles.Count - 1].GetComponent<CompleteProject.HoleHealth>().allHoles = m_HellephantHoles;
                     }
                 }
                 yield return null;
