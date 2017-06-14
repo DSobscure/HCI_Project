@@ -1,35 +1,61 @@
 ﻿using UnityEngine;
+using System.Collections;
 
 namespace CompleteProject
 {
     public class EnemyManager : MonoBehaviour
     {
-        public GameObject enemy;                // The enemy prefab to be spawned.
-        public float spawnTime = 3f;            // How long between each spawn.
-        public Transform[] spawnPoints;         // An array of the spawn points this enemy can spawn from.
+        public GameObject m_Control;
+        public GameObject m_Hellphant;
+        public GameObject m_ZomBunny;
+        public GameObject m_ZomBear;
 
+        private float m_frequency = 0.1f;
+        private float m_timeInterval = 10.0f;
+        private float m_time = 0.0f;
 
         void Start ()
         {
-            // Call the Spawn function after a delay of the spawnTime and then continue to call after the same amount of time.
-            InvokeRepeating ("Spawn", spawnTime, spawnTime);
+            StartCoroutine(AddWave());   
         }
 
-
-        void Spawn ()
+        void Update()
         {
-            // If the player has no health left...
-            if(Global.Avatar.HP <= 0f)
+            m_time += Time.deltaTime;
+            if (m_time > m_timeInterval)
             {
-                // ... exit the function.
-                return;
+                int index;
+                if (m_Control.GetComponent<Control>().m_ZomBearHoles.Count > 0)
+                {
+                    index = Mathf.FloorToInt(Random.value * m_Control.GetComponent<Control>().m_ZomBearHoles.Count);
+                    Instantiate(m_ZomBear, m_Control.GetComponent<Control>().m_ZomBearHoles[index].transform.position, Quaternion.identity);
+                }
+
+                if (m_Control.GetComponent<Control>().m_ZomBunnyHoles.Count > 0)
+                {
+                    index = Mathf.FloorToInt(Random.value * m_Control.GetComponent<Control>().m_ZomBunnyHoles.Count);
+                    Instantiate(m_ZomBunny, m_Control.GetComponent<Control>().m_ZomBunnyHoles[index].transform.position, Quaternion.identity);
+                }
+
+                if (m_Control.GetComponent<Control>().m_HellephantHoles.Count > 0)
+                {
+                    index = Mathf.FloorToInt(Random.value * m_Control.GetComponent<Control>().m_HellephantHoles.Count);
+                    Instantiate(m_Hellphant, m_Control.GetComponent<Control>().m_HellephantHoles[index].transform.position, Quaternion.identity);
+                }
+               
+                m_time -= m_timeInterval;
             }
-
-            // Find a random index between zero and one less than the number of spawn points.
-            int spawnPointIndex = Random.Range (0, spawnPoints.Length);
-
-            // Create an instance of the enemy prefab at the randomly selected spawn point's position and rotation.
-            Instantiate (enemy, spawnPoints[spawnPointIndex].position, spawnPoints[spawnPointIndex].rotation);
+        }
+        
+        private IEnumerator AddWave()
+        {
+            while (true)
+            {
+                yield return new WaitForSeconds(5);
+                Global.Game.Wave++;
+                m_frequency *= 1.2f;
+                m_timeInterval = 1.0f / m_frequency;
+            }
         }
     }
 }

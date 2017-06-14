@@ -13,19 +13,18 @@ public class Control : MonoBehaviour, ITangoLifecycle, ITangoDepth {
 
     #region detect variables
     private bool waitDepthAvailable;
+    private float m_time = 0.0f;
     private Vector3 m_previousPosition = new Vector3(0, 0, 0);
     #endregion
 
     #region game variables;
     public GameObject m_ZomBunnyHole;
     public GameObject m_ZomBearHole;
-    public GameObject m_Obstacle;
     public GameObject m_HellephantHole;
 
-    private List<GameObject> m_ZomBunnyHoles = new List<GameObject>();
-    private List<GameObject> m_ZomBearHoles = new List<GameObject>();
-    private List<GameObject> m_Obstacles = new List<GameObject>();
-    private List<GameObject> m_HellephantHoles = new List<GameObject>();
+    public List<GameObject> m_ZomBunnyHoles = new List<GameObject>();
+    public List<GameObject> m_ZomBearHoles = new List<GameObject>();
+    public List<GameObject> m_HellephantHoles = new List<GameObject>();
 
     private Vector3 m_xAxis = new Vector3(1, 0, 0);
     private Vector3 m_xNagetiveAxis = new Vector3(-1, 0, 0);
@@ -48,7 +47,7 @@ public class Control : MonoBehaviour, ITangoLifecycle, ITangoDepth {
             AndroidHelper.AndroidQuit();
         }
 
-        if(Vector3.Distance(m_tangoARPoseController.m_tangoPosition, m_previousPosition) > 1.5f)
+        if(Vector3.Distance(m_tangoARPoseController.m_tangoPosition, m_previousPosition) > 1.0f)
         {
             m_previousPosition = m_tangoARPoseController.m_tangoPosition;
 
@@ -69,16 +68,14 @@ public class Control : MonoBehaviour, ITangoLifecycle, ITangoDepth {
                 m_HellephantHoles.Remove(target);
                 Destroy(target);
             }
+        }
 
-            foreach (var target in m_Obstacles.Where(x => Vector3.Distance(m_previousPosition, x.transform.position) > 5.0f).ToArray())
-            {
-                m_Obstacles.Remove(target);
-                Destroy(target);
-            }
-
+        m_time += Time.deltaTime;
+        if (m_time > 15.0f)
+        {
+            m_time -= 15.0f;
             StartCoroutine(WaitForDepthAndDetectPlanes());
         }
-       
         //GetInput();
     }
 
@@ -101,12 +98,6 @@ public class Control : MonoBehaviour, ITangoLifecycle, ITangoDepth {
             Destroy(m_HellephantHoles[i]);
         }
         m_HellephantHoles.Clear();
-
-        for (int i = m_Obstacles.Count - 1; i >= 0; i--) 
-        {
-            Destroy(m_Obstacles[i]);
-        }
-        m_Obstacles.Clear(); 
 
         m_tangoApplication.Unregister(this);
     }
@@ -187,17 +178,13 @@ public class Control : MonoBehaviour, ITangoLifecycle, ITangoDepth {
                     float angle = Vector3.Angle(findedPlane.normal, m_yAxis);
                     if (angle < 80.0f)
                     {
-                        if (Random.value < 0.4)
+                        if (Random.value < 0.5)
                         {
                             m_ZomBunnyHoles.Add(Instantiate(m_ZomBunnyHole, planeCenter, Quaternion.LookRotation(forward, findedPlane.normal)));
                         }
-                        else if (Random.value < 0.8)
-                        {
-                            m_ZomBearHoles.Add(Instantiate(m_ZomBearHole, planeCenter, Quaternion.LookRotation(forward, findedPlane.normal)));
-                        }
                         else
                         {
-                            m_Obstacles.Add(Instantiate(m_Obstacle, planeCenter, Quaternion.LookRotation(forward, findedPlane.normal)));
+                            m_ZomBearHoles.Add(Instantiate(m_ZomBearHole, planeCenter, Quaternion.LookRotation(forward, findedPlane.normal)));
                         }
                     }
                     else if (angle < 110.0f) 
