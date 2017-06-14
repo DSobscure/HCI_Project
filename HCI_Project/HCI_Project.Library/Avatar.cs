@@ -130,7 +130,7 @@ namespace HCI_Project.Library
             ManaConsumption = 5;
             ManaConsumptionDiscountRatio = 1;
             Damage = 10;
-            MissileSpeed = 15;
+            MissileSpeed = 5;
             ReloadTimeSpan = 0.2f;
             MissileNumber = 1;
             MissleRadius = 0.1f;

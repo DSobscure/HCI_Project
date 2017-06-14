@@ -11,7 +11,8 @@ public class AttackController : MonoBehaviour
 
     void Start()
     {
-        Global.Player.EventManager.OnRemoteOperation += EventManager_OnRemoteOperation;
+        if(Global.Player != null)
+            Global.Player.EventManager.OnRemoteOperation += EventManager_OnRemoteOperation;
         Global.Avatar.OnAttack += Fire;
     }
 
@@ -19,17 +20,19 @@ public class AttackController : MonoBehaviour
     {
         if(deviceCode == HCI_Project.Protocol.DeviceCode.HandTake)
         {
-            if((RemoteOperationCode)operationCode == RemoteOperationCode.Fire)
+            switch ((RemoteOperationCode)operationCode)
             {
-                if(reloadTimer <= 0 && Time.timeScale != 0)
-                    Global.Avatar.Attack();
+                case RemoteOperationCode.Fire:
+                    if (reloadTimer <= 0 && Time.timeScale != 0)
+                        Global.Avatar.Attack();
+                    break;
             }
         }
     }
 
     void Update()
     {
-        transform.rotation = m_camera.transform.rotation;
+        transform.forward = m_camera.transform.forward;
         // Add the time since Update was last called to the timer.
         reloadTimer -= Time.deltaTime;
 #if MOBILE_INPUT
